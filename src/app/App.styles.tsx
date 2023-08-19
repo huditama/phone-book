@@ -8,6 +8,8 @@ const Styles = {
     maxWidth: '500px',
     margin: '0 auto',
     position: 'relative',
+  }),
+  contentContainer: css({
     overflow: 'hidden'
   })
 };

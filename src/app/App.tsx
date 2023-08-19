@@ -1,10 +1,15 @@
 import React from 'react';
 import { Styles } from './App.styles';
 
+import Header from '../components/Header/Header';
+
 function App() {
   return (
     <div className={Styles.mainLayout}>
-      <span>Hello World</span>
+      <Header />
+      <div className={Styles.contentContainer}>
+        <span>Hello World</span>
+      </div>
     </div>
   );
 }
