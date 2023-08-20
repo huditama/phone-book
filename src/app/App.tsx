@@ -4,7 +4,9 @@ import { useQuery } from '@apollo/client';
 import { Styles } from './App.styles';
 import { ContactType } from '../types/types';
 import { GET_CONTACT_LIST } from '../utils/queries';
+import Error from '../components/Error/Error';
 import Header from '../components/Header/Header';
+import Loading from '../components/Loading/Loading';
 import ContactCard from '../components/ContactCard/ContactCard';
 
 const App = () => {
@@ -18,11 +20,11 @@ const App = () => {
 
   const renderContactList = () => {
     if (loading) {
-      return <span>Loading...</span>;
+      return <Loading />;
     }
 
     if (error) {
-      return <span>Oops, something went wrong. Please try again!</span>;
+      return <Error />;
     }
 
     if (!data?.contact?.length) {

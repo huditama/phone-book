@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const GET_CONTACT_LIST = gql`
+export const GET_CONTACT_LIST = gql`
   query GetContactList (
     $distinct_on: [contact_select_column!],
     $limit: Int,
@@ -26,4 +26,16 @@ const GET_CONTACT_LIST = gql`
   }
 `;
 
-export { GET_CONTACT_LIST };
+export const GET_CONTACT_DETAILS = gql`
+  query GetContactDetail($id: Int!) {
+    contact_by_pk(id: $id) {
+      id
+      first_name
+      last_name
+      created_at
+      phones {
+        number
+      }
+    }
+  }
+`;
