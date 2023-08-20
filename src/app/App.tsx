@@ -2,8 +2,8 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import { Styles } from './App.styles';
-import { ContactType } from '../types/types';
 import { GET_CONTACT_LIST } from '../utils/queries';
+import { ContactType, HeaderType } from '../types/types';
 import Error from '../components/Error/Error';
 import Header from '../components/Header/Header';
 import Loading from '../components/Loading/Loading';
@@ -38,7 +38,7 @@ const App = () => {
 
   return (
     <div>
-      <Header />
+      <Header type={HeaderType.Home} />
       <div className={Styles.contentContainer}>
         {renderContactList()}
       </div>

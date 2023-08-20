@@ -31,6 +31,18 @@ const Styles = {
     backgroundColor: 'transparent',
     width: '100%',
   }),
+  backButton: css({
+    background: 'none',
+    color: 'inherit',
+    border: 'none',
+    padding: 0,
+    font: 'inherit',
+    cursor: 'pointer',
+    outline: 'inherit',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  }),
 };
 
 export { Styles };
