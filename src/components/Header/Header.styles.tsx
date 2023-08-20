@@ -14,7 +14,7 @@ const Styles = {
   searchIcon: css({
     height: '16px',
     width: '16px',
-    marginRight: '8px'
+    marginRight: '8px',
   }),
   searchContainer: css({
     backgroundColor: '#E1E1E1',
@@ -23,14 +23,14 @@ const Styles = {
     flexDirection: 'row',
     padding: '5px 8px 5px 8px',
     borderRadius: '4px',
-    width: '100%'
+    width: '100%',
   }),
   searchInput: css({
     outline: 'none',
     border: 'none',
     backgroundColor: 'transparent',
-    width: '100%'
-  })
+    width: '100%',
+  }),
 };
 
-export { Styles };
+export default Styles;
