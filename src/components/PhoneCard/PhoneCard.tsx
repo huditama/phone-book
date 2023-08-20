@@ -11,21 +11,21 @@ const PhoneCard: FC<PhoneCardProps> = ({ phone, index }) => (
   <div className={Styles.container(index)}>
     {phone}
     <div className={Styles.ctaContainer}>
-      <button className={Styles.ctaButton} type="button">
+      <a href={`sms:${phone}`} className={Styles.ctaButton}>
         <img
           src="/icons/text.png"
           alt="Text icon"
           className={Styles.ctaIcon}
         />
-      </button>
+      </a>
       <div className={Styles.ctaSpacer} />
-      <button className={Styles.ctaButton} type="button">
+      <a href={`tel:${phone}`} className={Styles.ctaButton}>
         <img
           src="/icons/call.png"
           alt="Call icon"
           className={Styles.ctaIcon}
         />
-      </button>
+      </a>
     </div>
   </div>
 );
