@@ -40,14 +40,19 @@ const Header: FC<HeaderProps> = ({ type }) => {
 
       {
         type === HeaderType.Details && (
-          <button className={Styles.backButton} type="button" onClick={onClickBack}>
-            <img
-              src="/icons/back.png"
-              alt="Back icon"
-              className={Styles.searchIcon}
-            />
-            <span>Contacts</span>
-          </button>
+          <>
+            <button className={Styles.backButton} type="button" onClick={onClickBack}>
+              <img
+                src="/icons/back.png"
+                alt="Back icon"
+                className={Styles.searchIcon}
+              />
+              <span>Contacts</span>
+            </button>
+            <button className={Styles.backButton} type="button">
+              <span>Edit</span>
+            </button>
+          </>
         )
       }
     </header>

@@ -10,6 +10,7 @@ const Styles = {
     boxShadow: '0 0 48px 0 rgba(0, 0, 0, .2)',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'space-between',
   }),
   searchIcon: css({
     height: '16px',
