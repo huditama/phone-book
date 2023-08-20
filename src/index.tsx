@@ -4,8 +4,9 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { RouterProvider } from 'react-router-dom';
 
 import './index.css';
-import reportWebVitals from './utils/reportWebVitals';
 import router from './utils/routes';
+import Layout from './components/Layout/Layout';
+import reportWebVitals from './utils/reportWebVitals';
 
 const client = new ApolloClient({
   uri: 'https://wpe-hiring.tokopedia.net/graphql',
@@ -17,11 +18,13 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <RouterProvider router={router} />
-    </ApolloProvider>
-  </React.StrictMode>,
+  <Layout>
+    <React.StrictMode>
+      <ApolloProvider client={client}>
+        <RouterProvider router={router} />
+      </ApolloProvider>
+    </React.StrictMode>
+  </Layout>,
 );
 
 // If you want to start measuring performance in your app, pass a function

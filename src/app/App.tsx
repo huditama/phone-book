@@ -2,10 +2,10 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 
 import { Styles } from './App.styles';
-import Header from '../components/Header/Header';
-import ContactCard from '../components/ContactCard/ContactCard';
 import { ContactType } from '../types/types';
 import { GET_CONTACT_LIST } from '../utils/queries';
+import Header from '../components/Header/Header';
+import ContactCard from '../components/ContactCard/ContactCard';
 
 const App = () => {
   const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
@@ -35,7 +35,7 @@ const App = () => {
   };
 
   return (
-    <div className={Styles.mainLayout}>
+    <div>
       <Header />
       <div className={Styles.contentContainer}>
         {renderContactList()}

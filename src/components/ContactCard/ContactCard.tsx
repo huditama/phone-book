@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import { Link } from 'react-router-dom';
 import { Styles } from './ContactCard.styles';
 import { ContactType } from '../../types/types';
 
@@ -9,9 +10,9 @@ interface ContactCardProps {
 }
 
 const ContactCard: FC<ContactCardProps> = ({ contact, index }) => (
-  <a href="/" className={Styles.contactCard(index)}>
+  <Link to={`/contact/${contact.id}`} className={Styles.contactCard(index)}>
     <span>{`${contact.first_name} ${contact.last_name}`}</span>
-  </a>
+  </Link>
 );
 
 export default ContactCard;
