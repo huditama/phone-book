@@ -8,7 +8,13 @@ import { ContactType } from '../types/types';
 import { GET_CONTACT_LIST } from '../utils/queries';
 
 const App = () => {
-  const { loading, error, data } = useQuery(GET_CONTACT_LIST);
+  const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
+    variables: {
+      order_by: {
+        first_name: 'asc',
+      },
+    },
+  });
 
   const renderContactList = () => {
     if (loading) {
@@ -23,8 +29,8 @@ const App = () => {
       return <span>No contacts!</span>;
     }
 
-    return data.contact.map((contact: ContactType) => (
-      <ContactCard key={contact.id} contact={contact} />
+    return data.contact.map((contact: ContactType, index: number) => (
+      <ContactCard key={contact.id} index={index} contact={contact} />
     ));
   };
 

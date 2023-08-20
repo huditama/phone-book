@@ -10,6 +10,7 @@ const Styles = {
     position: 'relative',
   }),
   contentContainer: css({
+    padding: '16px',
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
