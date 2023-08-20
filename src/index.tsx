@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { RouterProvider } from 'react-router-dom';
 
 import './index.css';
-import App from './app/App';
 import reportWebVitals from './utils/reportWebVitals';
+import router from './utils/routes';
 
 const client = new ApolloClient({
   uri: 'https://wpe-hiring.tokopedia.net/graphql',
@@ -18,7 +19,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <RouterProvider router={router} />
     </ApolloProvider>
   </React.StrictMode>,
 );
