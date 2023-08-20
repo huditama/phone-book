@@ -16,4 +16,4 @@ const Styles = {
   }),
 };
 
-export default Styles;
+export { Styles };

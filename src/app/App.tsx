@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import Styles from './App.styles';
+import { Styles } from './App.styles';
 import Header from '../components/Header/Header';
 import ContactCard from '../components/ContactCard/ContactCard';
 import { ContactType } from '../types/types';
