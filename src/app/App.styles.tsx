@@ -10,8 +10,10 @@ const Styles = {
     position: 'relative',
   }),
   contentContainer: css({
-    overflow: 'hidden'
-  })
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+  }),
 };
 
 export { Styles };
