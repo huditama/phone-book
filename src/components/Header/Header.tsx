@@ -19,10 +19,14 @@ const Header: FC<HeaderProps> = ({ type }) => {
     }
   };
 
+  const onClickAdd = () => {
+    navigate('/form');
+  };
+
   return (
     <header className={Styles.header}>
       {
-        type === HeaderType.Home && (
+        type === HeaderType.Home ? (
           <>
             <div className={Styles.searchContainer}>
               <img
@@ -36,7 +40,7 @@ const Header: FC<HeaderProps> = ({ type }) => {
                 className={Styles.searchInput}
               />
             </div>
-            <button className={Styles.addButton} type="button">
+            <button onClick={onClickAdd} className={Styles.addButton} type="button">
               <img
                 src="/icons/add.png"
                 alt="Add icon"
@@ -44,11 +48,7 @@ const Header: FC<HeaderProps> = ({ type }) => {
               />
             </button>
           </>
-        )
-      }
-
-      {
-        type === HeaderType.Details && (
+        ) : (
           <>
             <button className={Styles.backButton} type="button" onClick={onClickBack}>
               <img
@@ -58,9 +58,13 @@ const Header: FC<HeaderProps> = ({ type }) => {
               />
               <span>Contacts</span>
             </button>
-            <button className={Styles.backButton} type="button">
-              <span>Edit</span>
-            </button>
+            {
+              type === HeaderType.Details && (
+                <button className={Styles.backButton} type="button">
+                  <span>Edit</span>
+                </button>
+              )
+            }
           </>
         )
       }

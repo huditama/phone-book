@@ -7,4 +7,5 @@ export type ContactType = {
 export enum HeaderType {
   Home = 'Home',
   Details = 'Details',
+  Form = 'Form',
 }
