@@ -32,10 +32,10 @@ const Form = () => {
         <div className={Styles.spacer(32)} />
         {
           phoneNumbers.map((phone) => (
-            <>
-              <FormInput key={phone.id} type="tel" placeholder="Phone number" />
+            <div key={phone.id}>
+              <FormInput type="tel" placeholder="Phone number" />
               <div className={Styles.spacer(8)} />
-            </>
+            </div>
 
           ))
         }
