@@ -12,10 +12,14 @@ const Styles = {
     alignItems: 'center',
     justifyContent: 'space-between',
   }),
-  searchIcon: css({
+  icon: css({
     height: '16px',
     width: '16px',
     marginRight: '8px',
+  }),
+  addIcon: css({
+    height: '16px',
+    width: '16px',
   }),
   searchContainer: css({
     backgroundColor: '#E1E1E1',
@@ -43,6 +47,16 @@ const Styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+  }),
+  addButton: css({
+    background: 'none',
+    color: 'inherit',
+    border: 'none',
+    padding: 0,
+    font: 'inherit',
+    cursor: 'pointer',
+    outline: 'inherit',
+    marginLeft: '16px',
   }),
 };
 

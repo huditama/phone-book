@@ -23,18 +23,27 @@ const Header: FC<HeaderProps> = ({ type }) => {
     <header className={Styles.header}>
       {
         type === HeaderType.Home && (
-          <div className={Styles.searchContainer}>
-            <img
-              src="/icons/search.png"
-              alt="Search icon"
-              className={Styles.searchIcon}
-            />
-            <input
-              type="text"
-              placeholder="Search a contact"
-              className={Styles.searchInput}
-            />
-          </div>
+          <>
+            <div className={Styles.searchContainer}>
+              <img
+                src="/icons/search.png"
+                alt="Search icon"
+                className={Styles.icon}
+              />
+              <input
+                type="text"
+                placeholder="Search a contact"
+                className={Styles.searchInput}
+              />
+            </div>
+            <button className={Styles.addButton} type="button">
+              <img
+                src="/icons/add.png"
+                alt="Add icon"
+                className={Styles.addIcon}
+              />
+            </button>
+          </>
         )
       }
 
@@ -45,7 +54,7 @@ const Header: FC<HeaderProps> = ({ type }) => {
               <img
                 src="/icons/back.png"
                 alt="Back icon"
-                className={Styles.searchIcon}
+                className={Styles.icon}
               />
               <span>Contacts</span>
             </button>
