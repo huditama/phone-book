@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Styles } from './Header.styles';
@@ -6,9 +6,11 @@ import { HeaderType } from '../../types/types';
 
 interface HeaderProps {
   type: HeaderType
+  disableRightButton?: boolean | undefined,
+  onClickRightButton?: (event: FormEvent) => void,
 }
 
-const Header: FC<HeaderProps> = ({ type }) => {
+const Header: FC<HeaderProps> = ({ type, disableRightButton, onClickRightButton }) => {
   const navigate = useNavigate();
 
   const onClickBack = () => {
@@ -58,18 +60,19 @@ const Header: FC<HeaderProps> = ({ type }) => {
               />
               <span>Contacts</span>
             </button>
-            {
-              type === HeaderType.Details && (
-                <button className={Styles.backButton} type="button">
-                  <span>Edit</span>
-                </button>
-              )
-            }
+            <button onClick={onClickRightButton} disabled={disableRightButton} className={Styles.backButton} type="button">
+              <span className={Styles.rightButtonText(disableRightButton)}>{type === HeaderType.Details ? 'Edit' : 'Done'}</span>
+            </button>
           </>
         )
       }
     </header>
   );
+};
+
+Header.defaultProps = {
+  disableRightButton: false,
+  onClickRightButton: () => null,
 };
 
 export default Header;

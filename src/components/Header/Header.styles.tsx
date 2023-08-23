@@ -58,6 +58,9 @@ const Styles = {
     outline: 'inherit',
     marginLeft: '16px',
   }),
+  rightButtonText: (disabled: boolean | undefined) => css({
+    color: disabled ? '#E1E1E1' : '#147EFB',
+  }),
 };
 
 export { Styles };
