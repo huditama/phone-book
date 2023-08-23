@@ -52,6 +52,14 @@ const ContactDetails = () => {
     }
   }, [loadingDelete, errorDelete, dataDelete]);
 
+  const onClickEdit = () => {
+    navigate('/form', {
+      state: {
+        contact: dataDetails?.contact_by_pk,
+      },
+    });
+  };
+
   const handleOpenDialog = () => {
     setShowDialog(true);
   };
@@ -114,7 +122,11 @@ const ContactDetails = () => {
 
   return (
     <>
-      <Header disableRightButton={loadingDetails || loadingDelete} type={HeaderType.Details} />
+      <Header
+        onClickRightButton={onClickEdit}
+        disableRightButton={loadingDetails || loadingDelete || !dataDetails?.contact_by_pk}
+        type={HeaderType.Details}
+      />
       <div className={Styles.layout}>
         {renderContactDetails()}
       </div>
