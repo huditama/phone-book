@@ -16,6 +16,8 @@ const App = () => {
         first_name: 'asc',
       },
     },
+    // I'm still confused on which policies to use :(
+    fetchPolicy: 'cache-and-network',
   });
 
   const renderContactList = () => {
