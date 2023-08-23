@@ -125,12 +125,7 @@ const Form: FC = () => {
           </div>
         ))}
         <button onClick={handleAddPhoneNumber} className={Styles.addPhoneButton} type="button">
-          <img
-            src="/icons/add_grey_fill.png"
-            alt="Add icon"
-            className={Styles.addIcon}
-          />
-          <p style={{ color: 'white' }}>Add phone</p>
+          <p style={{ color: '#147EFB' }}>Add phone</p>
         </button>
       </div>
     </div>

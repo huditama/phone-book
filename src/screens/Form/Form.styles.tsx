@@ -14,7 +14,7 @@ const Styles = {
     font: 'inherit',
     cursor: 'pointer',
     outline: 'inherit',
-    backgroundColor: '#147EFB',
+    backgroundColor: 'white',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

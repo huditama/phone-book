@@ -1,15 +1,17 @@
+/* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/naming-convention */
-import React from 'react';
-import { useQuery } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Error from '../../components/Error/Error';
 import Header from '../../components/Header/Header';
 import Loading from '../../components/Loading/Loading';
 import PhoneCard from '../../components/PhoneCard/PhoneCard';
+import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
 import { Styles } from './ContactDetails.styles';
 import { HeaderType } from '../../types/types';
-import { GET_CONTACT_DETAILS } from '../../utils/queries';
+import { DELETE_CONTACT, GET_CONTACT_DETAILS } from '../../utils/queries';
 
 interface PhoneInterface {
   number: string
@@ -17,22 +19,75 @@ interface PhoneInterface {
 
 const ContactDetails = () => {
   const { contactId } = useParams();
-  const { loading, error, data } = useQuery(GET_CONTACT_DETAILS, {
+
+  const {
+    loading: loadingDetails, error: errorDetails, data: dataDetails,
+  } = useQuery(GET_CONTACT_DETAILS, {
     variables: {
       id: contactId,
     },
   });
 
+  const [
+    deleteContact,
+    { loading: loadingDelete, error: errorDelete, data: dataDelete },
+  ] = useMutation(DELETE_CONTACT);
+
+  const navigate = useNavigate();
+
+  const [showDialog, setShowDialog] = useState(false);
+
+  const handleCloseDialog = () => {
+    setShowDialog(false);
+  };
+
+  useEffect(() => {
+    if (errorDelete) {
+      alert('Oops, something went wrong. Please try again!');
+    }
+
+    if (!loadingDelete && !errorDelete && dataDelete) {
+      handleCloseDialog();
+      navigate('/', { replace: true });
+    }
+  }, [loadingDelete, errorDelete, dataDelete]);
+
+  const handleOpenDialog = () => {
+    setShowDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteContact({
+      variables: {
+        id: contactId,
+      },
+    });
+  };
+
+  const renderDeleteConfirmation = () => (
+    <>
+      <button onClick={handleOpenDialog} className={Styles.deleteContactButton} type="button">
+        <p style={{ color: '#FC3D39' }}>Delete contact</p>
+      </button>
+      <ConfirmationDialog
+        message="Are you sure you want to perform this action?"
+        isOpen={showDialog}
+        onClose={handleCloseDialog}
+        onConfirm={handleConfirmDelete}
+      />
+    </>
+  );
+
   const renderContactDetails = () => {
-    if (loading) {
+    if (loadingDetails) {
       return <Loading />;
     }
 
-    if (error || !data?.contact_by_pk) {
+    if (errorDetails || !dataDetails?.contact_by_pk) {
       return <Error />;
     }
 
-    const { first_name, last_name, phones } = data.contact_by_pk;
+    const { first_name, last_name, phones } = dataDetails.contact_by_pk;
     const initials = first_name.charAt(0).toUpperCase()
       + last_name.charAt(0).toUpperCase();
     return (
@@ -52,13 +107,14 @@ const ContactDetails = () => {
             />
           ))
         }
+        {renderDeleteConfirmation()}
       </>
     );
   };
 
   return (
     <>
-      <Header type={HeaderType.Details} />
+      <Header disableRightButton={loadingDetails || loadingDelete} type={HeaderType.Details} />
       <div className={Styles.layout}>
         {renderContactDetails()}
       </div>

@@ -25,6 +25,23 @@ const Styles = {
     fontWeight: 'bold',
     marginTop: '16px',
   }),
+  deleteContactButton: css({
+    marginTop: '16px',
+    color: 'inherit',
+    border: 'none',
+    padding: 0,
+    font: 'inherit',
+    cursor: 'pointer',
+    outline: 'inherit',
+    backgroundColor: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: '4px',
+    height: '30px',
+    width: '100%',
+  }),
 };
 
 export { Styles };

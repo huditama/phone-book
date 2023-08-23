@@ -9,3 +9,8 @@ export enum HeaderType {
   Details = 'Details',
   Form = 'Form',
 }
+
+export enum ButtonType {
+  Confirm = 'Confirm',
+  Cancel = 'Cancel',
+}
