@@ -1,3 +1,5 @@
+import { Constants } from './constants';
+
 /* eslint-disable no-restricted-syntax */
 export function deepEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) {
@@ -30,4 +32,14 @@ export function getExcessEntries<T>(array1: T[], array2: T[]): T[] {
   }
 
   return array2.slice(array1.length);
+}
+
+export function getFavoritesFromStorage() {
+  try {
+    const favoritesFromStorage = localStorage.getItem(Constants.LocalStorage.Favorites) || '';
+    const favorites = JSON.parse(favoritesFromStorage) || [];
+    return favorites;
+  } catch (error) {
+    return [];
+  }
 }

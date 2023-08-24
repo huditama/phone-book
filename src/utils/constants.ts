@@ -1,5 +1,5 @@
 export const Constants = {
   LocalStorage: {
-    Favorites: 'Favorites',
+    Favorites: 'favorites',
   },
 };
