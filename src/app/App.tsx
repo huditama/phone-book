@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { Styles } from './App.styles';
@@ -10,15 +10,27 @@ import Loading from '../components/Loading/Loading';
 import ContactCard from '../components/ContactCard/ContactCard';
 
 const App = () => {
+  const [searchKeyword, setSearchKeyword] = useState('');
   const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
     variables: {
       order_by: {
         first_name: 'asc',
       },
+      where: {
+        _or: [
+          { first_name: { _ilike: `%${searchKeyword}%` } },
+          { last_name: { _ilike: `%${searchKeyword}%` } },
+        ],
+      },
     },
     // I'm still confused on which policies to use :(
     fetchPolicy: 'cache-and-network',
   });
+
+  const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSearchKeyword(value);
+  };
 
   const renderContactList = () => {
     if (loading) {
@@ -40,7 +52,7 @@ const App = () => {
 
   return (
     <div>
-      <Header type={HeaderType.Home} />
+      <Header onChangeSearch={onChangeSearch} type={HeaderType.Home} />
       <div className={Styles.contentContainer}>
         {renderContactList()}
       </div>

@@ -1,4 +1,4 @@
-import React, { FC, FormEvent } from 'react';
+import React, { ChangeEvent, FC, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Styles } from './Header.styles';
@@ -8,9 +8,15 @@ interface HeaderProps {
   type: HeaderType
   disableRightButton?: boolean | undefined,
   onClickRightButton?: (event: FormEvent) => void,
+  onChangeSearch?: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-const Header: FC<HeaderProps> = ({ type, disableRightButton, onClickRightButton }) => {
+const Header: FC<HeaderProps> = ({
+  type,
+  disableRightButton,
+  onClickRightButton,
+  onChangeSearch,
+}) => {
   const navigate = useNavigate();
 
   const onClickBack = () => {
@@ -38,6 +44,7 @@ const Header: FC<HeaderProps> = ({ type, disableRightButton, onClickRightButton 
               />
               <input
                 type="text"
+                onChange={onChangeSearch}
                 placeholder="Search a contact"
                 className={Styles.searchInput}
               />
@@ -73,6 +80,7 @@ const Header: FC<HeaderProps> = ({ type, disableRightButton, onClickRightButton 
 Header.defaultProps = {
   disableRightButton: false,
   onClickRightButton: () => null,
+  onChangeSearch: () => null,
 };
 
 export default Header;
