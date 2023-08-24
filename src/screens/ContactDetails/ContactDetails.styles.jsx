@@ -25,7 +25,7 @@ const Styles = {
     fontWeight: 'bold',
     marginTop: '16px',
   }),
-  deleteContactButton: css({
+  ctaButton: css({
     marginTop: '16px',
     color: 'inherit',
     border: 'none',

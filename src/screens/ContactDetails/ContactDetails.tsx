@@ -10,8 +10,10 @@ import Loading from '../../components/Loading/Loading';
 import PhoneCard from '../../components/PhoneCard/PhoneCard';
 import ConfirmationDialog from '../../components/ConfirmationDialog/ConfirmationDialog';
 import { Styles } from './ContactDetails.styles';
+import { Constants } from '../../utils/constants';
 import { HeaderType } from '../../types/types';
 import { DELETE_CONTACT, GET_CONTACT_DETAILS } from '../../utils/queries';
+import { getFavoritesFromStorage } from '../../utils/helpers';
 
 interface PhoneInterface {
   number: string
@@ -41,6 +43,10 @@ const ContactDetails = () => {
   const handleCloseDialog = () => {
     setShowDialog(false);
   };
+
+  const isContactFavorite = () => getFavoritesFromStorage().includes(contactId);
+
+  const [contactFavorited, setContactFavorited] = useState(isContactFavorite());
 
   useEffect(() => {
     if (errorDelete) {
@@ -75,7 +81,7 @@ const ContactDetails = () => {
 
   const renderDeleteConfirmation = () => (
     <>
-      <button onClick={handleOpenDialog} className={Styles.deleteContactButton} type="button">
+      <button onClick={handleOpenDialog} className={Styles.ctaButton} type="button">
         <p style={{ color: '#FC3D39' }}>Delete contact</p>
       </button>
       <ConfirmationDialog
@@ -85,6 +91,34 @@ const ContactDetails = () => {
         onConfirm={handleConfirmDelete}
       />
     </>
+  );
+
+  const addToFavorites = () => {
+    const favorites = getFavoritesFromStorage();
+
+    favorites.push(contactId);
+    localStorage.setItem(Constants.LocalStorage.Favorites, JSON.stringify(favorites));
+    setContactFavorited(true);
+  };
+
+  const deleteFromFavorites = () => {
+    const favorites = getFavoritesFromStorage();
+    const filteredFavorites = favorites.filter((id: string) => id !== contactId);
+
+    localStorage.setItem(Constants.LocalStorage.Favorites, JSON.stringify(filteredFavorites));
+    setContactFavorited(false);
+  };
+
+  const renderFavoritesButton = () => (
+    <button
+      onClick={contactFavorited ? deleteFromFavorites : addToFavorites}
+      className={Styles.ctaButton}
+      type="button"
+    >
+      <p style={{ color: '#147EFB' }}>
+        {`${contactFavorited ? 'Delete from favorites' : 'Add to favorites'}`}
+      </p>
+    </button>
   );
 
   const renderContactDetails = () => {
@@ -116,6 +150,7 @@ const ContactDetails = () => {
             />
           ))
         }
+        {renderFavoritesButton()}
         {renderDeleteConfirmation()}
       </>
     );
