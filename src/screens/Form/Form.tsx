@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-alert */
 /* eslint-disable react/no-array-index-key */
@@ -11,9 +12,9 @@ import Header from '../../components/Header/Header';
 import FormInput from '../../components/FormInput/FormInput';
 import { Styles } from './Form.styles';
 import { HeaderType } from '../../types/types';
-import { deepEqual } from '../../utils/helpers';
+import { deepEqual, getExcessEntries } from '../../utils/helpers';
 import {
-  ADD_CONTACT_WITH_PHONES, EDIT_CONTACT, EDIT_PHONE_NUMBER,
+  ADD_CONTACT_WITH_PHONES, ADD_NUMBER_TO_CONTACT, EDIT_CONTACT, EDIT_PHONE_NUMBER,
 } from '../../utils/queries';
 
 type Phones = {
@@ -34,16 +35,25 @@ const Form: FC = () => {
   });
   const [isValid, setIsValid] = useState(false);
   const [addContact, { loading, error, data }] = useMutation(ADD_CONTACT_WITH_PHONES);
+
   const [editPhone,
     {
       loading: loadingEditPhone, error: errorEditPhone, data: dataEditPhone,
     },
   ] = useMutation(EDIT_PHONE_NUMBER);
+
   const [editContact,
     {
       loading: loadingEditContact, error: errorEditContact, data: dataEditContact,
     },
   ] = useMutation(EDIT_CONTACT);
+
+  const [
+    addNumber,
+    {
+      loading: loadingAddNumber, error: errorAddNumber, data: dataAddNumber,
+    },
+  ] = useMutation(ADD_NUMBER_TO_CONTACT);
 
   const navigate = useNavigate();
 
@@ -83,16 +93,21 @@ const Form: FC = () => {
   const checkPhonesEdited = () => {
     const { phones } = contactFromLocation;
     const phonesFromLocation = phones.map((phone: Phones) => ({ number: phone.number }));
-    const sanitizedPhonesFromState = contact.phones
-      .filter((phoneNumber) => phoneNumber.number.trim() !== '');
-
-    const arePhonesChanged = !deepEqual(sanitizedPhonesFromState, phonesFromLocation);
+    const arePhonesChanged = !deepEqual(contact.phones, phonesFromLocation);
 
     return arePhonesChanged;
   };
 
+  const returnNewNumbers = () => {
+    const { phones } = contactFromLocation;
+    const phonesFromLocation = phones.map((phone: Phones) => ({ number: phone.number }));
+    return getExcessEntries(phonesFromLocation, contact.phones);
+  };
+
+  const checkNewPhones = () => !!returnNewNumbers().length;
+
   useEffect(() => {
-    if (error || errorEditPhone || errorEditContact) {
+    if (error || errorEditPhone || errorEditContact || errorAddNumber) {
       alert('Oops, something went wrong. Please try again!');
     }
 
@@ -104,6 +119,7 @@ const Form: FC = () => {
     if (
       (!loadingEditPhone && !errorEditPhone && dataEditPhone)
       || (!loadingEditContact && !errorEditContact && dataEditContact)
+      || (!loadingAddNumber && !errorAddNumber && dataAddNumber)
     ) {
       const editDataId = contactFromLocation.id;
       navigate(`/contact/${editDataId}`, { replace: true });
@@ -112,12 +128,15 @@ const Form: FC = () => {
     loading,
     loadingEditPhone,
     loadingEditContact,
+    loadingAddNumber,
     error,
     errorEditPhone,
     errorEditContact,
+    errorAddNumber,
     data,
     dataEditPhone,
     dataEditContact,
+    dataAddNumber,
   ]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -149,14 +168,12 @@ const Form: FC = () => {
 
   const editPhoneNumbers = async () => {
     const { phones, id } = contactFromLocation;
-    const sanitizedPhonesFromState = contact.phones
-      .filter((phoneNumber) => phoneNumber.number.trim() !== '');
     const phonesFromLocation = phones.map((phone: Phones) => ({ number: phone.number }));
 
     try {
       await Promise.all(
         phonesFromLocation.map(async (phone: Phones, index: number) => {
-          const editedPhoneFromState = sanitizedPhonesFromState[index];
+          const editedPhoneFromState = contact.phones[index];
           await editPhone({
             variables: {
               pk_columns: {
@@ -173,29 +190,44 @@ const Form: FC = () => {
     }
   };
 
+  const addPhoneNumbers = async () => {
+    const { id } = contactFromLocation;
+    const newNumbers = returnNewNumbers();
+
+    try {
+      await Promise.all(
+        newNumbers.map(async (phone: Phones) => {
+          await addNumber({
+            variables: {
+              contact_id: id,
+              phone_number: phone.number,
+            },
+          });
+        }),
+      );
+    } catch (err) {
+      // err
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    // Remove empty phone number entries
-    const sanitizedPhoneNumbers = contact.phones
-      .filter((phoneNumber) => phoneNumber.number.trim() !== '');
-
-    const sanitizedContact = {
-      ...contact,
-      phones: sanitizedPhoneNumbers,
-    };
+    const hasEmptyNumber = contact.phones.some((phone) => phone.number === '');
+    if (hasEmptyNumber) {
+      alert('Please do not leave input empty!');
+      return;
+    }
 
     if (contactFromLocation) {
-      const hasEmptyNumber = contact.phones.some((phone) => phone.number === '');
       const { first_name, last_name } = contact;
-
-      if (hasEmptyNumber) {
-        alert('Please do not leave input empty!');
-        return;
-      }
 
       if (checkPhonesEdited()) {
         editPhoneNumbers();
+      }
+
+      if (checkNewPhones()) {
+        addPhoneNumbers();
       }
 
       if (checkNamesEdited()) {
@@ -210,7 +242,7 @@ const Form: FC = () => {
         });
       }
     } else {
-      addContact({ variables: sanitizedContact });
+      addContact({ variables: contact });
     }
   };
 
@@ -224,7 +256,7 @@ const Form: FC = () => {
           || loading
           || loadingEditPhone
           || loadingEditContact
-          || (!checkNamesEdited() && !checkPhonesEdited())
+          || (contactFromLocation && !checkNamesEdited() && !checkPhonesEdited())
         }
       />
       <div className={Styles.container}>

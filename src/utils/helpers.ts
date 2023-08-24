@@ -23,3 +23,11 @@ export function deepEqual(obj1: any, obj2: any): boolean {
 
   return true;
 }
+
+export function getExcessEntries<T>(array1: T[], array2: T[]): T[] {
+  if (array2.length <= array1.length) {
+    return []; // No excess entries
+  }
+
+  return array2.slice(array1.length);
+}
