@@ -26,6 +26,7 @@ const ContactDetails = () => {
     variables: {
       id: contactId,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const [
