@@ -155,7 +155,11 @@ const Form: FC = () => {
 
   const handlePhoneInputChange = (event: ChangeEvent<HTMLInputElement>, index: number) => {
     const newPhoneNumber = event.target.value;
-    const sanitizedPhoneNumber = newPhoneNumber.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+
+    // Regular expression to match characters other than numbers, '+', '*', and '#'
+    const pattern = /[^0-9+*#]/g;
+    const sanitizedPhoneNumber = newPhoneNumber.replace(pattern, '');
+
     const newPhoneNumbers = [...contact.phones];
     newPhoneNumbers[index].number = sanitizedPhoneNumber;
 
