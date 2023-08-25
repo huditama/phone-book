@@ -141,9 +141,15 @@ const Form: FC = () => {
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+
+    // Regular expression to match characters other than letters, numbers, and spaces
+    const pattern = /[^a-zA-Z0-9\s]/g;
+
+    const sanitizedValue = value.replace(pattern, ''); // Remove special characters
+
     setContact((prevContact) => ({
       ...prevContact,
-      [name]: value,
+      [name]: sanitizedValue,
     }));
   };
 
