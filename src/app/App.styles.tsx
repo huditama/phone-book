@@ -15,6 +15,17 @@ const Styles = {
     display: 'flex',
     flexDirection: 'column',
   }),
+  header: css({
+    backgroundColor: '#E1E1E1',
+    height: 30,
+    margin: '-16px -16px 16px -16px',
+    padding: '0px 16px 0px 16px',
+    display: 'flex',
+    alignItems: 'center',
+  }),
+  spacer: css({
+    height: '16px',
+  }),
 };
 
 export { Styles };
