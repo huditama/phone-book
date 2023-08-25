@@ -14,8 +14,12 @@ const App = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [contacts, setContacts] = useState([]);
   const [favorites, setFavorites] = useState([]);
+  const [page, setPage] = useState(1);
+
   const { loading, error, data } = useQuery(GET_CONTACT_LIST, {
     variables: {
+      limit: 10, // Limit of 10 contacts per page
+      offset: (page - 1) * 10, // Calculate the offset based on the current page
       order_by: {
         first_name: 'asc',
       },
@@ -24,28 +28,48 @@ const App = () => {
           { first_name: { _ilike: `%${searchKeyword}%` } },
           { last_name: { _ilike: `%${searchKeyword}%` } },
         ],
+        id: {
+          _nin: getFavoritesFromStorage().map((id: String) => Number(id)),
+        }, // Exclude IDs that are in favorites
       },
     },
-    // I'm still confused on which policies to use :(
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const {
+    loading: favoritesLoading,
+    error: favoritesError,
+    data: favoritesData,
+  } = useQuery(GET_CONTACT_LIST, {
+    variables: {
+      order_by: {
+        first_name: 'asc',
+      },
+      where: {
+        id: {
+          _in: getFavoritesFromStorage().map((id: String) => Number(id)),
+        }, // Filter by Favorites IDs
+      },
+    },
     fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
     if (data?.contact) {
       const favoritesId = getFavoritesFromStorage();
-
-      const filteredFavorites = data.contact.filter(
-        (contact: ContactType) => favoritesId.includes(String(contact.id)),
-      );
-
       const filteredContacts = data.contact.filter(
         (contact: ContactType) => !favoritesId.includes(String(contact.id)),
       );
 
       setContacts(filteredContacts);
-      setFavorites(filteredFavorites);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (favoritesData?.contact) {
+      setFavorites(favoritesData?.contact);
+    }
+  }, [favoritesData]);
 
   const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -59,17 +83,11 @@ const App = () => {
   );
 
   const renderContactList = () => {
-    if (loading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <Error />;
-    }
-
     if (!data?.contact?.length) {
       return <span>No contacts!</span>;
     }
+
+    const totalPages = Math.ceil(data.contact_aggregate.aggregate.count / 10);
 
     return (
       <>
@@ -77,6 +95,25 @@ const App = () => {
         {contacts.map((contact: ContactType, index: number) => (
           <ContactCard key={contact.id} index={index} contact={contact} />
         ))}
+        <div className={Styles.pagination}>
+          <button
+            type="button"
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className={Styles.paginationButton(page === 1)}
+          >
+            Previous
+          </button>
+          <span className={Styles.pageText}>{`${page} of ${totalPages}`}</span>
+          <button
+            type="button"
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className={Styles.paginationButton(page === totalPages)}
+          >
+            Next
+          </button>
+        </div>
       </>
     );
   };
@@ -97,12 +134,28 @@ const App = () => {
     return null;
   };
 
+  const renderFinal = () => {
+    if (loading || favoritesLoading) {
+      return <Loading />;
+    }
+
+    if (error || favoritesError) {
+      return <Error />;
+    }
+
+    return (
+      <>
+        {renderFavorites()}
+        {renderContactList()}
+      </>
+    );
+  };
+
   return (
     <div>
       <Header onChangeSearch={onChangeSearch} type={HeaderType.Home} />
       <div className={Styles.contentContainer}>
-        {renderFavorites()}
-        {renderContactList()}
+        {renderFinal()}
       </div>
     </div>
   );

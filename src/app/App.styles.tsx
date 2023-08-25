@@ -26,6 +26,22 @@ const Styles = {
   spacer: css({
     height: '16px',
   }),
+  paginationButton: (disabled: boolean) => css({
+    background: 'none',
+    color: disabled ? '#E1E1E1' : '#147EFB',
+    border: 'none',
+    padding: 0,
+    font: 'inherit',
+    cursor: 'pointer',
+    outline: 'inherit',
+  }),
+  pageText: css({
+    fontSize: '14px',
+    margin: '0px 8px 0px 8px',
+  }),
+  pagination: css({
+    marginTop: '16px',
+  }),
 };
 
 export { Styles };

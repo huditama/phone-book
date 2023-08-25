@@ -8,6 +8,11 @@ export const GET_CONTACT_LIST = gql`
     $order_by: [contact_order_by!],
     $where: contact_bool_exp
   ) {
+    contact_aggregate(where: $where) {
+      aggregate {
+        count
+      }
+    }
     contact(
         distinct_on: $distinct_on,
         limit: $limit,
